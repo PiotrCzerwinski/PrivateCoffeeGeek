@@ -63,6 +63,14 @@
             <artifactId>google-auth-library-oauth2-http</artifactId>
             <version>1.7.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -102,5 +110,24 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>embedmongo</id>
+            <properties>
+                <spring.profiles.active>embedmongo</spring.profiles.active>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>de.flapdoodle.embed</groupId>
+                    <artifactId>de.flapdoodle.embed.mongo</artifactId>
+                    <!--<scope>test</scope>-->
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
 </project>
