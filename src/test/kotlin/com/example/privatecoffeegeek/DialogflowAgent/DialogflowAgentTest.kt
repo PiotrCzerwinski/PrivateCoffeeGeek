@@ -20,11 +20,9 @@ class DialogflowAgentTest {
     @Test
     fun `should connect with agent and get response`(){
         val agent = getAgent()
-        val test = agent.sendMessage("Hej")
-        val text = test.responseMessagesList
-            .flatMap { it.text.textList}.joinToString()
-        println(text)
-        assert(text.isNotEmpty())
+        val test = agent.askAndGetResponse("test1", "Hej")
+        println(test)
+        assert(test.isNotEmpty())
     }
 
     fun getAgent(): DialogflowAgent =

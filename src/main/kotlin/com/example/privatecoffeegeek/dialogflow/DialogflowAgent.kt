@@ -18,7 +18,7 @@ class DialogflowAgent(
     init {
         val credentials = GoogleCredentials.fromStream(FileInputStream(JSON_AUTH_PATH))
             .createScoped("https://www.googleapis.com/auth/cloud-platform")
-        
+
         val sessionsSettingsBuilder = SessionsSettings.newBuilder()
         sessionsSettingsBuilder.endpoint = "$locationId-dialogflow.googleapis.com:443"
         sessionsSettingsBuilder.setCredentialsProvider {
@@ -27,9 +27,9 @@ class DialogflowAgent(
         this.sessionsClient = SessionsClient.create(sessionsSettingsBuilder.build())
     }
 
-    fun sendMessage(text: String): QueryResult {
+    private fun sendMessage(sessionId: String, text: String): QueryResult {
         val session = SessionName.ofProjectLocationAgentSessionName(
-            projectId, locationId, agentId, UUID.randomUUID().toString()
+            projectId, locationId, agentId, sessionId
         )
 
         val queryInput = QueryInput.newBuilder()
@@ -46,6 +46,14 @@ class DialogflowAgent(
         return sessionsClient.detectIntent(detectIntentRequest)
             .queryResult
     }
+
+    fun askAndGetResponse(sessionId: String, text: String): List<String> =
+        asListOfStrings(sendMessage(sessionId,text).responseMessagesList)
+
+
+    private fun asListOfStrings(responseList: List<ResponseMessage>): List<String> =
+        responseList.flatMap { it.text.textList }
+
     companion object{
         const val JSON_AUTH_PATH="C:\\PRACA INŻYNIERSKA\\yourprivatecoffeegeek_auth.json"
         const val LANGUAGE_CODE="Polish-pl"
