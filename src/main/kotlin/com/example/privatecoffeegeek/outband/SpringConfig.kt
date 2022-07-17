@@ -17,4 +17,7 @@ class SpringConfig {
 
     @Bean
     fun communicateWithAgentUseCase(repository: MessageRepository) = CommunicateWithAgentUseCase(repository)
+
+    @Bean
+    fun webConfig() = WebConfig()
 }
